@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Valentine's Day, Sammy ❤️</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --bg-color: #fff0f3;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --text-main: #590d22;
+            --text-light: #800f2f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating Hearts Background */
+        .heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -10vh;
+            color: var(--secondary);
+            opacity: 0.6;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .script-font {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Utilities */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.6);
+        }
+
+        /* Glassmorphism Card Style */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 1rem;
+            opacity: 0; /* For fade-in animation */
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
+        #hero h1 {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        #hero p {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        /* Why Sammy is Special */
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin-top: 3rem;
+        }
+
+        .reason-card {
+            padding: 2rem;
+        }
+
+        .reason-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+        }
+
+        .reason-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Moments Gallery */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 3rem;
+        }
+
+        .photo-frame {
+            width: 300px;
+            height: 350px;
+            overflow: hidden;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(255, 77, 109, 0.3);
+        }
+
+        .photo-frame:hover img {
+            transform: scale(1.1);
+        }
+
+        .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Love Letter */
+        .letter-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            position: relative;
+        }
+
+        .letter-content {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            line-height: 1.6;
+            min-height: 200px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.5rem;
+            background-color: var(--primary);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Surprise Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 90%;
+            width: 500px;
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 4px solid var(--bg-color);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 2rem;
+        }
+
+        /* Music Toggle */
+        .music-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 999;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .music-toggle:hover {
+            transform: rotate(15deg);
+        }
+
+        /* Footer */
+        footer {
+            padding: 2rem;
+            text-align: center;
+            background: white;
+            color: var(--text-light);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            #hero h1 { font-size: 2.5rem; }
+            .letter-content { font-size: 1.5rem; }
+            .modal-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Audio (Hidden) -->
+    <!-- Note: Browsers require user interaction to play audio. The toggle button handles this. -->
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <!-- Replace the src above with your own romantic mp3 file link -->
+    </audio>
+
+    <div class="music-toggle" onclick="toggleMusic()">🎵</div>
+
+    <!-- Floating Hearts Container -->
+    <div class="heart-bg" id="heart-bg"></div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="visible">
+        <div class="container">
+            <h1>Happy Valentine’s Day,<br>Sammy ❤️</h1>
+            <p>This little surprise is made especially for you.</p>
+            <a href="#reasons" class="btn">Click Me, Sammy 💘</a>
+        </div>
+    </section>
+
+    <!-- Reasons Section -->
+    <section id="reasons">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">What I Love About You</h2>
+            <div class="reasons-grid">
+                <div class="glass-card reason-card">
+                    <div class="reason-icon">☀️</div>
+                    <h3>Your Smile</h3>
+                    <p>It brightens my darkest days and lights up the room.</p>
+                </div>
+                <div class="glass-card reason-card">
+                    <div class="reason-icon">🎶</div>
+                    <h3>Your Laugh</h3>
+                    <p>It is my absolute favorite melody in the world.</p>
+                </div>
+                <div class="glass-card reason-card">
+                    <div class="reason-icon">💬</div>
+                    <h3>Our Talks</h3>
+                    <p>Talking to you makes everything feel better instantly.</p>
+                </div>
+                <div class="glass-card reason-card">
+                    <div class="reason-icon">✨</div>
+                    <h3>Your Soul</h3>
+                    <p>You are the most beautiful person inside and out.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Moments Section -->
+    <section id="moments">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">Memories I Treasure</h2>
+            <div class="gallery">
+                <!-- Placeholder Images - Replace src with actual photos of you and Sammy -->
+                <div class="photo-frame">
+                    <img src="sam1.jpg" alt="Memory 1">
+                    <div class="caption">Ganda So Much Sammy.</div>
+                </div>
+                <div class="photo-frame">
+                    <img src="sam2.jpg" alt="Memory 2">
+                    <div class="caption">Ackkk ang Cute.</div>
+                </div>
+                <div class="photo-frame">
+                    <img src="sam3.jpg" alt="Memory 3">
+                    <div class="caption">My favorite view.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Love Letter Section -->
+    <section id="letter">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 2rem;">A Letter For You, Sammy</h2>
+            <div class="glass-card letter-container">
+                <p class="letter-content" id="typewriter-text"></p>
+                <span class="cursor"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Surprise Section -->
+    <section id="surprise">
+        <div class="container">
+            <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">One Last Thing...</h2>
+            <button class="btn" onclick="openSurprise()">Open Your Surprise, Sammy 🎁</button>
+        </div>
+    </section>
+
+    <footer>
+        <p>Made with ❤️ just for Sammy.</p>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <h2 style="color: var(--primary); margin-bottom: 1rem;">Happy Valentines Sammy, will you be my Valentine? ❤️</h2>
+            <div class="modal-buttons">
+                <button class="btn" onclick="acceptValentine()">YES 💕</button>
+                <button class="btn" onclick="acceptValentine()">Of course YES 😆</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Floating Hearts Animation Logic
+        function createHearts() {
+            const container = document.getElementById('heart-bg');
+            const heartCount = 20;
+
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's'; // 4-7s duration
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // 2. Scroll Fade-in Animation
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Trigger typewriter if it's the letter section
+                    if (entry.target.id === 'letter' && !typewriterStarted) {
+                        typeWriter();
+                        typewriterStarted = true;
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // 3. Typewriter Effect
+        const text = "Sammy, I don’t know if you realize how special you are, but every time I see your name pop up, my heart skips a little. You make ordinary days feel extraordinary. I just wanted you to know how much you mean to me. Happy Valentine’s Day, beautiful ❤️";
+        const speed = 50;
+        let i = 0;
+        let typewriterStarted = false;
+
+        function typeWriter() {
+            if (i < text.length) {
+                document.getElementById("typewriter-text").innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            } else {
+                document.querySelector('.cursor').style.display = 'none';
+            }
+        }
+
+        // 4. Music Toggle
+        const music = document.getElementById('bg-music');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                music.pause();
+                document.querySelector('.music-toggle').innerHTML = '🎵';
+            } else {
+                music.play();
+                document.querySelector('.music-toggle').innerHTML = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // 5. Surprise Modal & Confetti
+        function openSurprise() {
+            document.getElementById('modal').classList.add('active');
+            fireConfetti();
+        }
+
+        function acceptValentine() {
+            const modalContent = document.querySelector('.modal-content');
+            modalContent.innerHTML = `
+                <h2 style="color: var(--primary); font-size: 2.5rem;">Yay! ❤️</h2>
+                <p style="font-size: 1.2rem; margin-top: 1rem;">You just made me the happiest person alive, Sammy!</p>
+            `;
+            
+            // Intense confetti explosion
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff4d6d', '#ff8fa3', '#ffffff']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff4d6d', '#ff8fa3', '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        function fireConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4d6d', '#ff8fa3', '#ffffff']
+            });
+        }
+    </script>
+</body>
+</html>
