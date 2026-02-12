@@ -326,6 +326,36 @@
             .letter-content { font-size: 1.5rem; }
             .modal-buttons { flex-direction: column; }
         }
+
+        /* --- NEW ANIMATIONS --- */
+        /* Shaking Animation for the Surprise Button */
+        @keyframes shake {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(5deg) scale(1.1); }
+            50% { transform: rotate(0deg) scale(1.1); }
+            75% { transform: rotate(-5deg) scale(1.1); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        .shake-hover:hover {
+            animation: shake 0.5s ease-in-out infinite;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        /* Mouse Heart Trail */
+        .cursor-heart {
+            position: absolute;
+            color: var(--primary);
+            font-size: 20px;
+            pointer-events: none;
+            animation: fadeUp 1s ease-out forwards;
+            z-index: 9999;
+        }
+
+        @keyframes fadeUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -383,7 +413,7 @@
     <!-- Moments Section -->
     <section id="moments">
         <div class="container">
-            <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">The Beauty of Sammy</h2>
+            <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;">Memories I Treasure</h2>
             <div class="gallery">
                 <!-- Placeholder Images - Replace src with actual photos of you and Sammy -->
                 <div class="photo-frame">
@@ -392,11 +422,11 @@
                 </div>
                 <div class="photo-frame">
                     <img src="sam2.jpg" alt="Memory 2">
-                    <div class="caption">Ackkk ang Cute🥰.</div>
+                    <div class="caption">Ackkk ang Cute.</div>
                 </div>
                 <div class="photo-frame">
                     <img src="sam3.jpg" alt="Memory 3">
-                    <div class="caption">Pretty so much Sammy🥰🫶.</div>
+                    <div class="caption">My favorite view.</div>
                 </div>
             </div>
         </div>
@@ -405,7 +435,7 @@
     <!-- Love Letter Section -->
     <section id="letter">
         <div class="container">
-            <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 2rem;">A Letter For You, Sammy💐💐💐</h2>
+            <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 2rem;">A Letter For You, Sammy</h2>
             <div class="glass-card letter-container">
                 <p class="letter-content" id="typewriter-text"></p>
                 <span class="cursor"></span>
@@ -417,7 +447,7 @@
     <section id="surprise">
         <div class="container">
             <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">One Last Thing...</h2>
-            <button class="btn" onclick="openSurprise()">Open Your Surprise, Sammy 🎁</button>
+            <button class="btn shake-hover" onclick="openSurprise()" style="font-size: 1.5rem; padding: 20px 40px;">Open Your Surprise, Sammy 🎁</button>
         </div>
     </section>
 
@@ -508,6 +538,29 @@
             isPlaying = !isPlaying;
         }
 
+        // Attempt to autoplay music on load
+        window.addEventListener('load', () => {
+            music.play().then(() => {
+                isPlaying = true;
+                document.querySelector('.music-toggle').innerHTML = '⏸️';
+            }).catch(error => {
+                // Browser blocked autoplay; wait for first user interaction
+                const startMusic = () => {
+                    if (!isPlaying) {
+                        music.play();
+                        isPlaying = true;
+                        document.querySelector('.music-toggle').innerHTML = '⏸️';
+                    }
+                    document.removeEventListener('click', startMusic);
+                    document.removeEventListener('touchstart', startMusic);
+                    document.removeEventListener('keydown', startMusic);
+                };
+                document.addEventListener('click', startMusic);
+                document.addEventListener('touchstart', startMusic);
+                document.addEventListener('keydown', startMusic);
+            });
+        });
+
         // 5. Surprise Modal & Confetti
         function openSurprise() {
             document.getElementById('modal').classList.add('active');
@@ -519,7 +572,7 @@
             modalContent.innerHTML = `
                 <h2 style="color: var(--primary); font-size: 2.5rem;">Yay! ❤️</h2>
                 <p style="font-size: 1.2rem; margin-top: 1rem;">You just made me the happiest person alive, Sammy!</p>
-            `;
+                <a href="index.html" class="btn">Thank you Sammy ❤️</a>`;
             
             // Intense confetti explosion
             var duration = 3 * 1000;
@@ -531,14 +584,16 @@
                     angle: 60,
                     spread: 55,
                     origin: { x: 0 },
-                    colors: ['#ff4d6d', '#ff8fa3', '#ffffff']
+                    colors: ['#ff4d6d', '#ff8fa3', '#ffffff'],
+                    shapes: ['heart']
                 });
                 confetti({
                     particleCount: 5,
                     angle: 120,
                     spread: 55,
                     origin: { x: 1 },
-                    colors: ['#ff4d6d', '#ff8fa3', '#ffffff']
+                    colors: ['#ff4d6d', '#ff8fa3', '#ffffff'],
+                    shapes: ['heart']
                 });
 
                 if (Date.now() < end) {
@@ -552,15 +607,10 @@
                 particleCount: 100,
                 spread: 70,
                 origin: { y: 0.6 },
-                colors: ['#ff4d6d', '#ff8fa3', '#ffffff']
+                colors: ['#ff4d6d', '#ff8fa3', '#ffffff'],
+                shapes: ['heart']
             });
         }
     </script>
 </body>
 </html>
-
-
-
-
-
-
